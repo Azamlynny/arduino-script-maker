@@ -22,17 +22,21 @@ Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS
 
 boolean recording = true;
 
-byte movey[500] = {}; // Fills up with 0
-
-byte movex[500] = {}; // Fills up with 0
 byte instructionIndex = 0;
 double displacementX = 0;
 double displacementY = 0;
+int index = 0;
+const int instructionSize = 100;
+boolean moveOrType[instructionSize] = {false}; // true means move
+char type[instructionSize] = {0};
+double x[instructionSize] = {0};
+double y[instructionSize] = {0};
+int tempIndex = 0;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(SW_pin, INPUT);
-//  digitalWrite(SW_pin, HIGH);
+  //  digitalWrite(SW_pin, HIGH);
   Mouse.begin();
   Keyboard.begin();
 }
@@ -42,44 +46,179 @@ void loop() {
 
   if(customKey == 'p'){
       recording = false;
+      tempIndex = 0;
   }
   if(customKey == 'o'){
       recording = true;
   }
 
-for(int i =0; i < 500; i++){
-    short x = ((analogRead(X_pin) - 512)) / 64;
-    short y = ((analogRead(Y_pin) - 512)) / 64;
-    Mouse.move(x, y);
-    displacementX += x;
-    displacementY += y;
+  if(recording){
+    short xM = ((analogRead(X_pin) - 512)) / 64;
+    short yM = ((analogRead(Y_pin) - 512)) / 64;
+    Mouse.move(xM, yM);
+    displacementX += xM;
+    displacementY += yM;
     delay(20);
 
-    movex[i] = x;
-        movey[i] = y;
+    if(customKey > 95){
+      if(displacementX != 0 || displacementY !=0){
+        x[index] =  displacementX;
+        y[index] = displacementY;
+        moveOrType[index] = true;
+        index++;
+        displacementX = 0;
+        displacementY = 0;
+      }
+      type[index] = customKey;
+      index++;
+      if(customKey == 'a'){
+        a();
+      }
+      else if(customKey == 'b'){
+        b();
+      }
+      else if(customKey == 'c'){
+        c();
+      }
+      else if(customKey == 'd'){
+        d();  
+      }
+      else if(customKey == 'e'){
+        e();
+      }
+      else if(customKey == 'f'){
+        f();
+      }
+      else if(customKey == 'g'){
+        g();
+      }
+      else if(customKey == 'h'){
+        h();
+      }
+      else if(customKey == 'i'){
+        i();
+      }
+      else if(customKey == 'j'){
+        j();
+      }
+      else if(customKey == 'k'){
+        k();
+      }
+      else if(customKey == 'l'){
+        l();
+      }
+      else if(customKey == 'm'){
+        m();
+      }
+      else if(customKey == 'n'){
+        n();
+      }
+      if(customKey == 'o'){ // Escape function
+      recording = true;
+      }
+    }
+  }
 
+  if(recording == false){
+    for(int o = 0; o < instructionSize; o++){
+      if(moveOrType[o]){
+        for(int i = 0; i < 10; i++){
+          Mouse.move(x[o] / 10, y[o] / 10);
+          delay(10);
+        }
+      }
+      else{
+          customKey = type[o];
+          if(customKey == 'a'){
+          a();
+        }
+        else if(customKey == 'b'){
+          b();
+        }
+        else if(customKey == 'c'){
+          c();
+        }
+        else if(customKey == 'd'){
+          d();  
+        }
+        else if(customKey == 'e'){
+          e();
+        }
+        else if(customKey == 'f'){
+          f();
+        }
+        else if(customKey == 'g'){
+          g();
+        }
+        else if(customKey == 'h'){
+          h();
+        }
+        else if(customKey == 'i'){
+          i();
+        }
+        else if(customKey == 'j'){
+          j();
+        }
+        else if(customKey == 'k'){
+          k();
+        }
+        else if(customKey == 'l'){
+          l();
+        }
+        else if(customKey == 'm'){
+          m();
+        }
+        else if(customKey == 'n'){
+          n();
+        }
+      }
+
+      delay(50);
+    }
+    recording = true;
+  }
+    
 }
 
-    for(int i = 0; i < 10; i++){
-      Mouse.move(displacementX/10, displacementY / 10);
-      delay(10);
-//        Mouse.move(movex[i], movey[i]);
-//      if(instructions[i] == 12){
-//        Mouse.click();      
-//      }
-//      if(instructions[i] == 8){
-//        delay(1000);
-//      }
-//      if(instructions[i] == 4){
-//        instructionIndex = 0;
-//        for(int i = 0; i < 100; i++){
-//          instructions[i] = 0;
-//        }
-//        break;
-//      delay(20);
-//    }
-    }
-  displacementX = 0;
-  displacementY = 0;
-    
+void a(){
+
+}
+void b(){
+
+}
+void c(){
+
+}
+void d(){
+
+}
+void e(){
+
+}
+void f(){
+
+}
+void g(){
+
+}
+void h(){
+
+}
+void i(){
+
+}
+void j(){
+
+}
+void k(){
+
+}
+void l(){
+
+}
+void m(){
+  Mouse.click();
+}
+void n(){
+
 }
