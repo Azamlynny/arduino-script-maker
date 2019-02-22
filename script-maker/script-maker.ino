@@ -31,7 +31,6 @@ boolean moveOrType[instructionSize] = {false}; // true means move
 char type[instructionSize] = {0};
 double x[instructionSize] = {0};
 double y[instructionSize] = {0};
-int tempIndex = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -46,10 +45,12 @@ void loop() {
 
   if(customKey == 'p'){
       recording = false;
-      tempIndex = 0;
   }
   if(customKey == 'o'){
       recording = true;
+  }
+  if(customKey == 'd'){
+    d(); // reset  
   }
 
   if(recording){
@@ -62,7 +63,7 @@ void loop() {
 
     if(customKey > 95){
       if(displacementX != 0 || displacementY !=0){
-        x[index] =  displacementX;
+        x[index] = displacementX;
         y[index] = displacementY;
         moveOrType[index] = true;
         index++;
@@ -114,7 +115,7 @@ void loop() {
         n();
       }
       if(customKey == 'o'){ // Escape function
-      recording = true;
+        recording = true;
       }
     }
   }
@@ -123,8 +124,8 @@ void loop() {
     for(int o = 0; o < instructionSize; o++){
       if(moveOrType[o]){
         for(int i = 0; i < 10; i++){
-          Mouse.move(x[o] / 10, y[o] / 10);
-          delay(10);
+          Mouse.move((x[o] / 10), (y[o] / 10));
+          delay(30);
         }
       }
       else{
@@ -138,7 +139,7 @@ void loop() {
         else if(customKey == 'c'){
           c();
         }
-        else if(customKey == 'd'){
+        else if(customKeypad.getKey() == 'd'){
           d();  
         }
         else if(customKey == 'e'){
@@ -172,8 +173,9 @@ void loop() {
           n();
         }
       }
-
-      delay(50);
+      if(type[o] != 0){
+        delay(200);
+      }
     }
     recording = true;
   }
@@ -190,7 +192,14 @@ void c(){
 
 }
 void d(){
-
+  for(int p = 0; p < 100; p++){
+    x[p] = {0};
+    y[p] = {0};
+    moveOrType[p] = {false};
+    type[p] = {0};
+  }
+  index = 0;
+  recording = true;
 }
 void e(){
 
