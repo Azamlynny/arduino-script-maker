@@ -21,13 +21,13 @@ byte colPins[COLS] = {5, 4, 3, 2}; //connect to the column pinouts of the keypad
 Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
 
 boolean recording = true;
-short displacementX = 0;
-short displacementY = 0;
 
 byte movey[500] = {}; // Fills up with 0
 
 byte movex[500] = {}; // Fills up with 0
 byte instructionIndex = 0;
+double displacementX = 0;
+double displacementY = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -51,7 +51,8 @@ for(int i =0; i < 500; i++){
     short x = ((analogRead(X_pin) - 512)) / 64;
     short y = ((analogRead(Y_pin) - 512)) / 64;
     Mouse.move(x, y);
-
+    displacementX += x;
+    displacementY += y;
     delay(20);
 
     movex[i] = x;
@@ -59,10 +60,10 @@ for(int i =0; i < 500; i++){
 
 }
 
-    for(int i = 0; i < 500; i++){
-      
-      
-        Mouse.move(movex[i], movey[i]);
+    for(int i = 0; i < 10; i++){
+      Mouse.move(displacementX/10, displacementY / 10);
+      delay(10);
+//        Mouse.move(movex[i], movey[i]);
 //      if(instructions[i] == 12){
 //        Mouse.click();      
 //      }
@@ -75,10 +76,10 @@ for(int i =0; i < 500; i++){
 //          instructions[i] = 0;
 //        }
 //        break;
-//      }
-      delay(20);
+//      delay(20);
+//    }
     }
-
- 
-  
+  displacementX = 0;
+  displacementY = 0;
+    
 }
